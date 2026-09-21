@@ -1,0 +1,77 @@
+<resources>
+    <string name="app_name">CampusRelay</string>
+
+    <!-- Login screen -->
+    <string name="login_tagline">Peer-to-peer campus deliveries, marketplace &amp; carpooling</string>
+    <string name="login_sso_google">Continue with Google (Campus SSO)</string>
+    <string name="login_sso_microsoft">Continue with Microsoft (Campus SSO)</string>
+    <string name="login_biometric_cd">Sign in with biometrics</string>
+    <string name="login_language_label">Language</string>
+    <string name="login_disclaimer">Sign-in is restricted to verified university student and staff accounts.</string>
+    <string name="login_biometric_unavailable">Biometric sign-in isn\'t available on this device.</string>
+    <string name="login_biometric_prompt_title">CampusRelay sign-in</string>
+    <string name="login_biometric_prompt_subtitle">Confirm it\'s you to continue</string>
+    <string name="login_signed_in_as">Signed in as %1$s</string>
+
+    <!-- Home dashboard -->
+    <string name="home_title">Campus Feed</string>
+    <string name="home_filter_deliveries">Deliveries</string>
+    <string name="home_filter_requests">Requests</string>
+    <string name="home_filter_my_routes">My Routes</string>
+    <string name="home_map_placeholder">Map view coming soon — showing nearby tasks as a list for now</string>
+    <string name="home_eco_card_title">Your Eco-Impact</string>
+    <string name="home_eco_card_subtitle">CO₂ saved from campus deliveries &amp; carpools</string>
+    <string name="home_eco_score_unit">kg CO₂ saved</string>
+    <string name="home_fab_cd">Create task</string>
+    <string name="home_empty_state">No campus tasks match this filter yet.</string>
+    <string name="home_offline_banner">You\'re offline — showing cached tasks. New requests will sync automatically.</string>
+
+    <!-- Nearby task item -->
+    <string name="task_reward_label">R%1$.2f reward</string>
+    <string name="task_distance_label">%1$.1f km away</string>
+
+    <!-- Create delivery wizard -->
+    <string name="create_delivery_title">New Delivery Request</string>
+    <string name="create_delivery_pickup_label">Pickup building</string>
+    <string name="create_delivery_dropoff_label">Drop-off building</string>
+    <string name="create_delivery_item_label">Item description</string>
+    <string name="create_delivery_item_hint">e.g. PROG7311 Textbook &amp; Notes</string>
+    <string name="create_delivery_weight_label">Size / weight</string>
+    <string name="weight_small">Small (Book)</string>
+    <string name="weight_medium">Medium (Bag)</string>
+    <string name="weight_large">Large (Box)</string>
+    <string name="create_delivery_tip_label">Incentive tip: R%1$.2f</string>
+    <string name="create_delivery_submit">Post delivery request</string>
+    <string name="create_delivery_success">Delivery request posted</string>
+    <string name="create_delivery_queued_offline">You\'re offline — request queued and will post once you\'re back online</string>
+    <string name="create_delivery_error_generic">Couldn\'t post the request. Please try again.</string>
+    <string name="create_delivery_validation_error">Pick a building for both pickup and drop-off, and describe the item.</string>
+
+    <!-- Settings -->
+    <string name="settings_title">Settings &amp; Preferences</string>
+    <string name="settings_profile_section">Profile</string>
+    <string name="settings_bio_hint">Add a short bio</string>
+    <string name="settings_location_label">On-campus location</string>
+    <string name="settings_security_section">Security</string>
+    <string name="settings_biometric_lock">Require biometrics for sign-in &amp; handoffs</string>
+    <string name="settings_notifications_section">Notifications</string>
+    <string name="settings_notify_delivery_status">Delivery status updates</string>
+    <string name="settings_notify_chat">New chat messages</string>
+    <string name="settings_language_section">Language</string>
+    <string name="settings_appearance_section">Appearance</string>
+    <string name="settings_dark_mode">Dark mode</string>
+    <string name="settings_save">Save changes</string>
+    <string name="settings_saved">Preferences saved</string>
+    <string name="settings_sign_out">Sign out</string>
+
+    <!-- Common -->
+    <string name="action_retry">Retry</string>
+    <string name="action_cancel">Cancel</string>
+    <string name="action_ok">OK</string>
+    <string name="bottom_nav_home">Home</string>
+    <string name="bottom_nav_create">New</string>
+    <string name="bottom_nav_settings">Settings</string>
+    <string name="language_english">English</string>
+    <string name="language_zulu">isiZulu</string>
+    <string name="language_afrikaans">Afrikaans</string>
+</resources>

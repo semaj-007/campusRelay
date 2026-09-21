@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+
+    <!-- CampusRelay eco-campus palette -->
+    <color name="relay_green_primary">#2E7D5B</color>
+    <color name="relay_green_dark">#1B5E3F</color>
+    <color name="relay_green_light">#B7E4C7</color>
+    <color name="relay_amber_accent">#F2A93B</color>
+    <color name="relay_surface">#F7FAF8</color>
+    <color name="relay_surface_dark">#12201A</color>
+    <color name="relay_text_primary">#16221C</color>
+    <color name="relay_text_secondary">#5B6B62</color>
+    <color name="relay_error">#C0392B</color>
+</resources>

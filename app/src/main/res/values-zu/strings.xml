@@ -1,0 +1,77 @@
+<resources>
+    <string name="app_name">CampusRelay</string>
+
+    <!-- Login screen -->
+    <string name="login_tagline">Ukulethwa kwezinto phakathi kwabafundi ekhampasini, imakethe, nokuhambisana ngemoto</string>
+    <string name="login_sso_google">Qhubeka nge-Google (i-SSO Yasekhampasini)</string>
+    <string name="login_sso_microsoft">Qhubeka nge-Microsoft (i-SSO Yasekhampasini)</string>
+    <string name="login_biometric_cd">Ngena ngezimpawu zomzimba</string>
+    <string name="login_language_label">Ulimi</string>
+    <string name="login_disclaimer">Ukungena kuvunyelwe kuphela kubafundi nabasebenzi benyuvesi abaqinisekisiwe.</string>
+    <string name="login_biometric_unavailable">Ukungena ngezimpawu zomzimba akutholakali kule divayisi.</string>
+    <string name="login_biometric_prompt_title">Ukungena kwe-CampusRelay</string>
+    <string name="login_biometric_prompt_subtitle">Qinisekisa ukuthi nguwe ukuze uqhubeke</string>
+    <string name="login_signed_in_as">Ungene njenge-%1$s</string>
+
+    <!-- Home dashboard -->
+    <string name="home_title">Uhlu Lwasekhampasini</string>
+    <string name="home_filter_deliveries">Ukulethwa Kwezinto</string>
+    <string name="home_filter_requests">Izicelo</string>
+    <string name="home_filter_my_routes">Izindlela Zami</string>
+    <string name="home_map_placeholder">Umbono webalazwe uzofika maduze — kubukiswa imisebenzi eseduze njengohlu okwamanje</string>
+    <string name="home_eco_card_title">Umthelela Wakho Wemvelo</string>
+    <string name="home_eco_card_subtitle">I-CO₂ eongiwe ngokulethwa kwezinto nokuhambisana ngemoto ekhampasini</string>
+    <string name="home_eco_score_unit">kg CO₂ eongiwe</string>
+    <string name="home_fab_cd">Dala umsebenzi</string>
+    <string name="home_empty_state">Awekho amasosha asekhampasini ahambisana nalesi sihlungi okwamanje.</string>
+    <string name="home_offline_banner">Awuxhunyiwe ku-inthanethi — kubukiswa imisebenzi egciniwe. Izicelo ezintsha zizovumelaniswa ngokuzenzakalela.</string>
+
+    <!-- Nearby task item -->
+    <string name="task_reward_label">Umklomelo we-R%1$.2f</string>
+    <string name="task_distance_label">Ibanga elingu-%1$.1f km</string>
+
+    <!-- Create delivery wizard -->
+    <string name="create_delivery_title">Isicelo Esisha Sokulethwa</string>
+    <string name="create_delivery_pickup_label">Isakhiwo sokulanda</string>
+    <string name="create_delivery_dropoff_label">Isakhiwo sokuletha</string>
+    <string name="create_delivery_item_label">Incazelo yento</string>
+    <string name="create_delivery_item_hint">isb. Incwadi ye-PROG7311 namanothi</string>
+    <string name="create_delivery_weight_label">Usayizi / isisindo</string>
+    <string name="weight_small">Encane (Incwadi)</string>
+    <string name="weight_medium">Ephakathi (Isikhwama)</string>
+    <string name="weight_large">Enkulu (Ibhokisi)</string>
+    <string name="create_delivery_tip_label">Isipho sokukhuthaza: R%1$.2f</string>
+    <string name="create_delivery_submit">Thumela isicelo sokulethwa</string>
+    <string name="create_delivery_success">Isicelo sokulethwa sithunyelwe</string>
+    <string name="create_delivery_queued_offline">Awuxhunyiwe ku-inthanethi — isicelo silindile futhi sizothunyelwa uma usuxhunyiwe futhi</string>
+    <string name="create_delivery_error_generic">Ayikwazanga ukuthumela isicelo. Sicela uzame futhi.</string>
+    <string name="create_delivery_validation_error">Khetha isakhiwo sokulanda nesokuletha, futhi uchaze into.</string>
+
+    <!-- Settings -->
+    <string name="settings_title">Izilungiselelo Nezintandokazi</string>
+    <string name="settings_profile_section">Iphrofayela</string>
+    <string name="settings_bio_hint">Engeza umlando omfushane</string>
+    <string name="settings_location_label">Indawo ekhampasini</string>
+    <string name="settings_security_section">Ukuphepha</string>
+    <string name="settings_biometric_lock">Idinga izimpawu zomzimba zokungena nokunikezelana</string>
+    <string name="settings_notifications_section">Izaziso</string>
+    <string name="settings_notify_delivery_status">Izibuyekezo zesimo sokulethwa</string>
+    <string name="settings_notify_chat">Imiyalezo emisha</string>
+    <string name="settings_language_section">Ulimi</string>
+    <string name="settings_appearance_section">Ukubukeka</string>
+    <string name="settings_dark_mode">Imodi emnyama</string>
+    <string name="settings_save">Londoloza izinguquko</string>
+    <string name="settings_saved">Izintandokazi zilondoloziwe</string>
+    <string name="settings_sign_out">Phuma</string>
+
+    <!-- Common -->
+    <string name="action_retry">Zama futhi</string>
+    <string name="action_cancel">Khansela</string>
+    <string name="action_ok">Kulungile</string>
+    <string name="bottom_nav_home">Ekhaya</string>
+    <string name="bottom_nav_create">Okusha</string>
+    <string name="bottom_nav_settings">Izilungiselelo</string>
+    <string name="language_english">IsiNgisi</string>
+    <string name="language_zulu">IsiZulu</string>
+    <string name="language_afrikaans">IsiBhunu</string>
+</resources>

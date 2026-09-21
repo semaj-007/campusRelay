@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "72996635117",
+    "project_id": "campusrelay-86e49",
+    "storage_bucket": "campusrelay-86e49.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:72996635117:android:167aad149d12db98a7e7e4",
+        "android_client_info": {
+          "package_name": "com.example.campusrelay"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCHuvYIWa4uJ0TZQ0fmaJ87qMLOHMEEvqY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

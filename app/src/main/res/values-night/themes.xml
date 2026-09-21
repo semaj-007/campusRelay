@@ -1,0 +1,12 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Base application theme. -->
+    <style name="Base.Theme.CampusRelay" parent="Theme.Material3.DayNight.NoActionBar">
+        <item name="colorPrimary">@color/relay_green_light</item>
+        <item name="colorPrimaryVariant">@color/relay_green_primary</item>
+        <item name="colorOnPrimary">@color/relay_text_primary</item>
+        <item name="colorSecondary">@color/relay_amber_accent</item>
+        <item name="colorOnSecondary">@color/relay_text_primary</item>
+        <item name="android:statusBarColor">@color/relay_surface_dark</item>
+        <item name="android:windowLightStatusBar">false</item>
+    </style>
+</resources>

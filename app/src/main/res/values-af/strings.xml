@@ -1,0 +1,77 @@
+<resources>
+    <string name="app_name">CampusRelay</string>
+
+    <!-- Login screen -->
+    <string name="login_tagline">Student-tot-student aflewerings, mark en saamry op kampus</string>
+    <string name="login_sso_google">Gaan voort met Google (Kampus-SSO)</string>
+    <string name="login_sso_microsoft">Gaan voort met Microsoft (Kampus-SSO)</string>
+    <string name="login_biometric_cd">Meld aan met biometrie</string>
+    <string name="login_language_label">Taal</string>
+    <string name="login_disclaimer">Aanmelding is beperk tot geverifieerde universiteitstudente en personeel.</string>
+    <string name="login_biometric_unavailable">Biometriese aanmelding is nie op hierdie toestel beskikbaar nie.</string>
+    <string name="login_biometric_prompt_title">CampusRelay-aanmelding</string>
+    <string name="login_biometric_prompt_subtitle">Bevestig dit is jy om voort te gaan</string>
+    <string name="login_signed_in_as">Aangemeld as %1$s</string>
+
+    <!-- Home dashboard -->
+    <string name="home_title">Kampus-voer</string>
+    <string name="home_filter_deliveries">Aflewerings</string>
+    <string name="home_filter_requests">Versoeke</string>
+    <string name="home_filter_my_routes">My Roetes</string>
+    <string name="home_map_placeholder">Kaartaansig kom binnekort — wys tans nabygeleë take as \'n lys</string>
+    <string name="home_eco_card_title">Jou Eko-impak</string>
+    <string name="home_eco_card_subtitle">CO₂ bespaar deur kampus-aflewerings en saamry</string>
+    <string name="home_eco_score_unit">kg CO₂ bespaar</string>
+    <string name="home_fab_cd">Skep taak</string>
+    <string name="home_empty_state">Geen kampustake pas nog by hierdie filter nie.</string>
+    <string name="home_offline_banner">Jy is vanlyn — wys tans gekasde take. Nuwe versoeke sal outomaties sinkroniseer.</string>
+
+    <!-- Nearby task item -->
+    <string name="task_reward_label">R%1$.2f beloning</string>
+    <string name="task_distance_label">%1$.1f km weg</string>
+
+    <!-- Create delivery wizard -->
+    <string name="create_delivery_title">Nuwe Afleweringsversoek</string>
+    <string name="create_delivery_pickup_label">Opgaargebou</string>
+    <string name="create_delivery_dropoff_label">Afleweringsgebou</string>
+    <string name="create_delivery_item_label">Itembeskrywing</string>
+    <string name="create_delivery_item_hint">bv. PROG7311 Handboek en Notas</string>
+    <string name="create_delivery_weight_label">Grootte / gewig</string>
+    <string name="weight_small">Klein (Boek)</string>
+    <string name="weight_medium">Medium (Sak)</string>
+    <string name="weight_large">Groot (Boks)</string>
+    <string name="create_delivery_tip_label">Aanmoedigingsfooitjie: R%1$.2f</string>
+    <string name="create_delivery_submit">Plaas afleweringsversoek</string>
+    <string name="create_delivery_success">Afleweringsversoek geplaas</string>
+    <string name="create_delivery_queued_offline">Jy is vanlyn — versoek is in die wagry en sal plaas sodra jy weer aanlyn is</string>
+    <string name="create_delivery_error_generic">Kon nie die versoek plaas nie. Probeer asseblief weer.</string>
+    <string name="create_delivery_validation_error">Kies \'n gebou vir beide opgaar en aflewering, en beskryf die item.</string>
+
+    <!-- Settings -->
+    <string name="settings_title">Instellings en Voorkeure</string>
+    <string name="settings_profile_section">Profiel</string>
+    <string name="settings_bio_hint">Voeg \'n kort bio by</string>
+    <string name="settings_location_label">Ligging op kampus</string>
+    <string name="settings_security_section">Sekuriteit</string>
+    <string name="settings_biometric_lock">Vereis biometrie vir aanmelding en oorhandigings</string>
+    <string name="settings_notifications_section">Kennisgewings</string>
+    <string name="settings_notify_delivery_status">Afleweringstatus-opdaterings</string>
+    <string name="settings_notify_chat">Nuwe kletsboodskappe</string>
+    <string name="settings_language_section">Taal</string>
+    <string name="settings_appearance_section">Voorkoms</string>
+    <string name="settings_dark_mode">Donker modus</string>
+    <string name="settings_save">Stoor veranderinge</string>
+    <string name="settings_saved">Voorkeure gestoor</string>
+    <string name="settings_sign_out">Meld af</string>
+
+    <!-- Common -->
+    <string name="action_retry">Probeer weer</string>
+    <string name="action_cancel">Kanselleer</string>
+    <string name="action_ok">OK</string>
+    <string name="bottom_nav_home">Tuis</string>
+    <string name="bottom_nav_create">Nuut</string>
+    <string name="bottom_nav_settings">Instellings</string>
+    <string name="language_english">Engels</string>
+    <string name="language_zulu">isiZulu</string>
+    <string name="language_afrikaans">Afrikaans</string>
+</resources>
