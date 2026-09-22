@@ -41,6 +41,8 @@ dependencies {
     implementation(libs.androidx.appcompat)
     implementation(libs.androidx.constraintlayout)
     implementation(libs.androidx.core.ktx)
+    implementation(libs.firebase.bom)
+    implementation(libs.firebase.auth)
     implementation(libs.firebase.messaging)
     implementation(libs.material)
 

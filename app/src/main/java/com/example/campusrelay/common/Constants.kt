@@ -9,7 +9,8 @@ package com.example.campusrelay.common
  * instance (e.g. "http://10.0.2.2:5000/") while you build the backend out.
  */
 object Constants {
-    const val BASE_URL = "https://campusrelay-api.azurewebsites.net/"
+    const val BASE_URL = "https://10.0.2.2:5001/"
+    // For production, change to: "https://campusrelay-api.azurewebsites.net/"
 
     const val PREFS_DATASTORE_NAME = "campus_relay_prefs"
     const val DATABASE_NAME = "campus_relay.db"

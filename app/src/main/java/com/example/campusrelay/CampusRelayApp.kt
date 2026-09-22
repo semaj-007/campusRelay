@@ -4,6 +4,7 @@ import android.app.Application
 import com.example.campusrelay.common.ServiceLocator
 import com.example.campusrelay.sync.SyncScheduler
 import com.example.campusrelay.util.NotificationHelper
+import com.google.firebase.FirebaseApp
 
 class CampusRelayApp : Application() {
 
@@ -11,6 +12,7 @@ class CampusRelayApp : Application() {
 
     override fun onCreate() {
         super.onCreate()
+        FirebaseApp.initializeApp(this)
         NotificationHelper.ensureChannel(this)
         // REQ-OFF-2: opportunistically flush anything still queued from a previous session
         // as soon as the app is next launched with connectivity.

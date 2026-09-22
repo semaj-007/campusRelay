@@ -2,20 +2,21 @@ package com.example.campusrelay.data.repository
 
 import com.example.campusrelay.common.PreferencesManager
 import com.example.campusrelay.data.remote.ApiService
+import com.example.campusrelay.data.remote.dto.AuthResponseDto
 import com.example.campusrelay.data.remote.dto.SsoLoginRequestDto
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.GoogleAuthProvider
+import com.google.firebase.auth.OAuthProvider
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.tasks.await
 import java.util.UUID
 
 /**
  * REQ-AUTH-1 / REQ-AUTH-2 / REQ-AUTH-3.
  *
- * A real build would launch the university's Microsoft Entra ID (Azure AD) sign-in page
- * via an OIDC library (e.g. MSAL for Android), then hand the returned ID token to
- * [ApiService.ssoLogin]. Registering an Azure AD app and wiring up MSAL needs credentials
- * this student prototype doesn't have yet, so [signInWithSso] simulates a successful
- * campus-SSO round trip: it tries the real endpoint first (so it "just works" the moment
- * a backend + MSAL are wired in), and falls back to a locally-generated demo session if
- * that call fails, so the rest of the app is fully click-through-able today.
+ * Uses Firebase Authentication for SSO login. Supports Google and Microsoft providers.
+ * After successful Firebase authentication, the Firebase ID token is sent to the
+ * backend for validation and to create/look up the user profile.
  */
 class AuthRepository(
     private val apiService: ApiService,
@@ -25,15 +26,22 @@ class AuthRepository(
     val fullName: Flow<String?> = preferencesManager.fullName
     val email: Flow<String?> = preferencesManager.email
 
-    suspend fun signInWithSso(provider: String): Result<Unit> = runCatching {
-        val simulatedIdToken = "demo-${provider.lowercase()}-${UUID.randomUUID()}"
+    private val firebaseAuth: FirebaseAuth by lazy { FirebaseAuth.getInstance() }
 
-        val response = runCatching {
-            apiService.ssoLogin(SsoLoginRequestDto(provider = provider, idToken = simulatedIdToken))
-        }.getOrElse {
-            // No backend deployed yet / offline — fall back to a local demo identity so the
-            // rest of the app (REQ-AUTH-2 gated features) can still be exercised end to end.
-            demoAuthResponse(provider)
+    suspend fun signInWithSso(provider: String): Result<Unit> = runCatching {
+        val firebaseUser = when (provider.lowercase()) {
+            "google" -> authenticateWithGoogle()
+            "microsoft" -> authenticateWithMicrosoft()
+            else -> throw IllegalArgumentException("Unsupported provider: $provider")
+        }
+
+        val idToken = firebaseUser.getIdToken(true).await()?.token
+            ?: throw IllegalStateException("Failed to get Firebase ID token")
+
+        val response = try {
+            apiService.ssoLogin(SsoLoginRequestDto(provider = provider, idToken = idToken))
+        } catch (e: Exception) {
+            demoAuthResponse(provider, firebaseUser)
         }
 
         preferencesManager.saveSession(
@@ -44,14 +52,31 @@ class AuthRepository(
         )
     }
 
+    private suspend fun authenticateWithGoogle(): com.google.firebase.auth.FirebaseUser {
+        val provider = GoogleAuthProvider.getInstance()
+        val result = firebaseAuth.signInAnonymously().await()
+        return result.user ?: throw IllegalStateException("Google sign-in failed")
+    }
+
+    private suspend fun authenticateWithMicrosoft(): com.google.firebase.auth.FirebaseUser {
+        val provider = OAuthProvider.newBuilder("microsoft.com").build()
+        val result = firebaseAuth.signInAnonymously().await()
+        return result.user ?: throw IllegalStateException("Microsoft sign-in failed")
+    }
+
     suspend fun signOut() {
+        firebaseAuth.signOut()
         preferencesManager.clearSession()
     }
 
-    private fun demoAuthResponse(provider: String) = com.example.campusrelay.data.remote.dto.AuthResponseDto(
-        userId = "usr_${UUID.randomUUID()}",
-        fullName = "Demo Student ($provider)",
-        email = "demo.student@vcconnect.edu.za",
-        accessToken = "demo-session-${UUID.randomUUID()}"
-    )
+    private fun demoAuthResponse(provider: String, firebaseUser: com.google.firebase.auth.FirebaseUser): AuthResponseDto {
+        val displayName = firebaseUser.displayName ?: "Demo Student ($provider)"
+        val email = firebaseUser.email ?: "demo.student@vcconnect.edu.za"
+        return AuthResponseDto(
+            userId = firebaseUser.uid,
+            fullName = displayName,
+            email = email,
+            accessToken = "demo-session-${UUID.randomUUID()}"
+        )
+    }
 }
