@@ -5,8 +5,6 @@ import com.example.campusrelay.data.remote.ApiService
 import com.example.campusrelay.data.remote.dto.AuthResponseDto
 import com.example.campusrelay.data.remote.dto.SsoLoginRequestDto
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.GoogleAuthProvider
-import com.google.firebase.auth.OAuthProvider
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.tasks.await
 import java.util.UUID
@@ -14,9 +12,9 @@ import java.util.UUID
 /**
  * REQ-AUTH-1 / REQ-AUTH-2 / REQ-AUTH-3.
  *
- * Uses Firebase Authentication for SSO login. Supports Google and Microsoft providers.
- * After successful Firebase authentication, the Firebase ID token is sent to the
- * backend for validation and to create/look up the user profile.
+ * Uses Firebase Authentication for SSO login. For the prototype, this simulates
+ * Firebase auth and sends a simulated ID token to the backend. In production,
+ * replace with actual Firebase Auth provider sign-in flows.
  */
 class AuthRepository(
     private val apiService: ApiService,
@@ -29,19 +27,23 @@ class AuthRepository(
     private val firebaseAuth: FirebaseAuth by lazy { FirebaseAuth.getInstance() }
 
     suspend fun signInWithSso(provider: String): Result<Unit> = runCatching {
-        val firebaseUser = when (provider.lowercase()) {
-            "google" -> authenticateWithGoogle()
-            "microsoft" -> authenticateWithMicrosoft()
-            else -> throw IllegalArgumentException("Unsupported provider: $provider")
-        }
-
-        val idToken = firebaseUser.getIdToken(true).await()?.token
-            ?: throw IllegalStateException("Failed to get Firebase ID token")
+        // For the prototype: generate a simulated Firebase ID token
+        // In production, replace this with actual Firebase Auth sign-in:
+        // val firebaseUser = when (provider.lowercase()) {
+        //     "google" -> authenticateWithGoogle()
+        //     "microsoft" -> authenticateWithMicrosoft()
+        //     else -> throw IllegalArgumentException("Unsupported provider: $provider")
+        // }
+        // val idToken = firebaseUser.getIdToken(true).await()?.token
+        
+        // Simulated Firebase ID token for development
+        val simulatedFirebaseToken = "simulated-firebase-token-${provider.lowercase()}-${UUID.randomUUID()}"
 
         val response = try {
-            apiService.ssoLogin(SsoLoginRequestDto(provider = provider, idToken = idToken))
+            apiService.ssoLogin(SsoLoginRequestDto(provider = provider, idToken = simulatedFirebaseToken))
         } catch (e: Exception) {
-            demoAuthResponse(provider, firebaseUser)
+            // No backend deployed yet / offline - fall back to a local demo identity
+            demoAuthResponse(provider)
         }
 
         preferencesManager.saveSession(
@@ -52,30 +54,36 @@ class AuthRepository(
         )
     }
 
+    /**
+     * For production: Uncomment and implement these methods
+     * when you have Firebase Authentication properly configured.
+     */
+    /*
     private suspend fun authenticateWithGoogle(): com.google.firebase.auth.FirebaseUser {
-        val provider = GoogleAuthProvider.getInstance()
-        val result = firebaseAuth.signInAnonymously().await()
-        return result.user ?: throw IllegalStateException("Google sign-in failed")
+        // Implement actual Google sign-in with Firebase
+        // val credential = ...
+        // return firebaseAuth.signInWithCredential(credential).await().user
+        throw NotImplementedError("Google sign-in not implemented yet")
     }
 
     private suspend fun authenticateWithMicrosoft(): com.google.firebase.auth.FirebaseUser {
-        val provider = OAuthProvider.newBuilder("microsoft.com").build()
-        val result = firebaseAuth.signInAnonymously().await()
-        return result.user ?: throw IllegalStateException("Microsoft sign-in failed")
+        // Implement actual Microsoft sign-in with Firebase
+        // val provider = OAuthProvider.newBuilder("microsoft.com").build()
+        // return firebaseAuth.signInWithProvider(provider).await().user
+        throw NotImplementedError("Microsoft sign-in not implemented yet")
     }
+    */
 
     suspend fun signOut() {
         firebaseAuth.signOut()
         preferencesManager.clearSession()
     }
 
-    private fun demoAuthResponse(provider: String, firebaseUser: com.google.firebase.auth.FirebaseUser): AuthResponseDto {
-        val displayName = firebaseUser.displayName ?: "Demo Student ($provider)"
-        val email = firebaseUser.email ?: "demo.student@vcconnect.edu.za"
+    private fun demoAuthResponse(provider: String): AuthResponseDto {
         return AuthResponseDto(
-            userId = firebaseUser.uid,
-            fullName = displayName,
-            email = email,
+            userId = "usr_${UUID.randomUUID()}",
+            fullName = "Demo Student ($provider)",
+            email = "demo.student@vcconnect.edu.za",
             accessToken = "demo-session-${UUID.randomUUID()}"
         )
     }
