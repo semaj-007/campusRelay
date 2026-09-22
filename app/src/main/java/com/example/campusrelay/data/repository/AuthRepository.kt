@@ -58,7 +58,7 @@ class AuthRepository(
 
     private suspend fun authenticateWithGoogle(): com.google.firebase.auth.FirebaseUser {
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-            .requestIdToken("YOUR_WEB_CLIENT_ID")  // Replace with your Firebase Web Client ID
+            .requestIdToken("72996635117-m35khe2bqe3pb01oara9eqsr01r25j23.apps.googleusercontent.com")  // Replace with your Firebase Web Client ID
             .requestEmail()
             .build()
 
