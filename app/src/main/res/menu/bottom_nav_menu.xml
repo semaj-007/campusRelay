@@ -5,9 +5,13 @@
         android:icon="@drawable/ic_home"
         android:title="@string/bottom_nav_home" />
     <item
-        android:id="@+id/createDeliveryFragment"
-        android:icon="@drawable/ic_add"
-        android:title="@string/bottom_nav_create" />
+        android:id="@+id/marketplaceFragment"
+        android:icon="@drawable/ic_marketplace"
+        android:title="@string/bottom_nav_marketplace" />
+    <item
+        android:id="@+id/carpoolFragment"
+        android:icon="@drawable/ic_carpool"
+        android:title="@string/bottom_nav_carpool" />
     <item
         android:id="@+id/settingsFragment"
         android:icon="@drawable/ic_settings"
