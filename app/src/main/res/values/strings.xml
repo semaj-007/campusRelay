@@ -69,8 +69,119 @@
     <string name="action_cancel">Cancel</string>
     <string name="action_ok">OK</string>
     <string name="bottom_nav_home">Home</string>
-    <string name="bottom_nav_create">New</string>
+    <string name="bottom_nav_marketplace">Marketplace</string>
+    <string name="bottom_nav_carpool">Carpool</string>
     <string name="bottom_nav_settings">Settings</string>
+
+    <!-- Marketplace -->
+    <string name="marketplace_title">Marketplace</string>
+    <string name="marketplace_search_hint">Search listings...</string>
+    <string name="marketplace_filter_all">All</string>
+    <string name="marketplace_filter_books">Books</string>
+    <string name="marketplace_filter_electronics">Electronics</string>
+    <string name="marketplace_filter_clothing">Clothing</string>
+    <string name="marketplace_filter_furniture">Furniture</string>
+    <string name="marketplace_filter_other">Other</string>
+    <string name="marketplace_empty_state">No listings found. Be the first to sell something!</string>
+    <string name="marketplace_fab_cd">Create listing</string>
+
+    <!-- Create Listing -->
+    <string name="create_listing_title">Create Marketplace Listing</string>
+    <string name="create_listing_photos_label">Item Photos</string>
+    <string name="create_listing_add_photos">+ Add Photos</string>
+    <string name="create_listing_title_label">Title</string>
+    <string name="create_listing_title_hint">e.g. PROG7311 Textbook &amp; Notes</string>
+    <string name="create_listing_description_label">Description</string>
+    <string name="create_listing_description_hint">Describe the item condition, features, etc.</string>
+    <string name="create_listing_category_label">Category</string>
+    <string name="create_listing_condition_label">Condition</string>
+    <string name="create_listing_price_label">Price</string>
+    <string name="create_listing_price_hint">R</string>
+    <string name="create_listing_post_button">POST LISTING</string>
+    <string name="create_listing_success">Listing created successfully!</string>
+    <string name="create_listing_error">Failed to create listing. Please try again.</string>
+    <string name="create_listing_validation_error">Please fill in all required fields.</string>
+
+    <!-- Marketplace Item Details -->
+    <string name="marketplace_details_title">Marketplace</string>
+    <string name="marketplace_details_condition_new">New</string>
+    <string name="marketplace_details_condition_like_new">Like New</string>
+    <string name="marketplace_details_condition_good">Good</string>
+    <string name="marketplace_details_condition_fair">Fair</string>
+    <string name="marketplace_details_category_books">Books</string>
+    <string name="marketplace_details_category_furniture">Furniture</string>
+    <string name="marketplace_details_category_electronics">Electronics</string>
+    <string name="marketplace_details_category_clothing">Clothing</string>
+    <string name="marketplace_details_category_other">Other</string>
+    <string name="marketplace_details_seller_label">Seller</string>
+    <string name="marketplace_details_contact_seller">CONTACT SELLER</string>
+    <string name="marketplace_details_buy_request">BUY / REQUEST</string>
+
+    <!-- Condition labels -->
+    <string name="condition_new">New</string>
+    <string name="condition_like_new">Like New</string>
+    <string name="condition_good">Good</string>
+    <string name="condition_fair">Fair</string>
+
+    <!-- Carpool -->
+    <string name="carpool_title">Carpooling</string>
+    <string name="carpool_offer_ride">+ Offer Ride</string>
+    <string name="carpool_where_from_label">Where from?</string>
+    <string name="carpool_where_to_label">Where to?</string>
+    <string name="carpool_date_label">Date</string>
+    <string name="carpool_search_rides">SEARCH RIDES</string>
+    <string name="carpool_available_rides">Available Rides</string>
+    <string name="carpool_empty_state">No rides found. Try a different search or offer a ride!</string>
+    <string name="carpool_view_ride">VIEW RIDE</string>
+
+    <!-- Create Ride Offer -->
+    <string name="create_ride_title">Create Ride Offer</string>
+    <string name="create_ride_origin_label">Origin</string>
+    <string name="create_ride_origin_hint">e.g. Pretoria</string>
+    <string name="create_ride_destination_label">Destination</string>
+    <string name="create_ride_destination_hint">e.g. Hatfield</string>
+    <string name="create_ride_departure_date_label">Departure Date</string>
+    <string name="create_ride_departure_time_label">Departure Time</string>
+    <string name="create_ride_seats_label">Available Seats</string>
+    <string name="create_ride_vehicle_type_label">Vehicle Type</string>
+    <string name="create_ride_price_label">Price Per Seat</string>
+    <string name="create_ride_price_hint">R</string>
+    <string name="create_ride_recurring_label">Recurring Ride</string>
+    <string name="create_ride_recurring_off">OFF</string>
+    <string name="create_ride_recurring_on">ON</string>
+    <string name="create_ride_repeat_label">Repeat</string>
+    <string name="create_ride_until_label">Until</string>
+    <string name="create_ride_create_button">CREATE RIDE</string>
+    <string name="create_ride_success">Ride offer created successfully!</string>
+    <string name="create_ride_error">Failed to create ride offer. Please try again.</string>
+    <string name="create_ride_validation_error">Please fill in all required fields.</string>
+
+    <!-- Ride Details -->
+    <string name="ride_details_title">Ride Details</string>
+    <string name="ride_details_vehicle_label">Vehicle</string>
+    <string name="ride_details_seats_available">Seats Available</string>
+    <string name="ride_details_price_per_seat">R%1$.2f / seat</string>
+    <string name="ride_details_driver_label">Driver</string>
+    <string name="ride_details_request_seat">REQUEST SEAT</string>
+
+    <!-- Vehicle types -->
+    <string name="vehicle_car">CAR</string>
+    <string name="vehicle_suv">SUV</string>
+    <string name="vehicle_van">VAN</string>
+
+    <!-- Recurrence types -->
+    <string name="recurrence_weekly">Weekly</string>
+    <string name="recurrence_monthly">Monthly</string>
+
+    <!-- Status labels -->
+    <string name="status_active">Active</string>
+    <string name="status_pending">Pending</string>
+    <string name="status_sold">Sold</string>
+    <string name="status_expired">Expired</string>
+    <string name="status_hold">Hold</string>
+    <string name="status_full">Full</string>
+    <string name="status_cancelled">Cancelled</string>
+
     <string name="language_english">English</string>
     <string name="language_zulu">isiZulu</string>
     <string name="language_afrikaans">Afrikaans</string>
