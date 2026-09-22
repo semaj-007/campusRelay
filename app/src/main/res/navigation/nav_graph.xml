@@ -41,4 +41,56 @@
             app:popUpToInclusive="true" />
     </fragment>
 
+    <!-- Marketplace -->
+    <fragment
+        android:id="@+id/marketplaceFragment"
+        android:name="com.example.campusrelay.ui.marketplace.MarketplaceFragment"
+        android:label="@string/marketplace_title"
+        tools:layout="@layout/fragment_marketplace">
+        <action
+            android:id="@+id/action_marketplace_to_create_listing"
+            app:destination="@id/createListingFragment" />
+        <action
+            android:id="@+id/action_marketplace_to_listing_details"
+            app:destination="@id/marketplaceItemDetailsFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/createListingFragment"
+        android:name="com.example.campusrelay.ui.marketplace.CreateListingFragment"
+        android:label="@string/create_listing_title"
+        tools:layout="@layout/fragment_create_listing" />
+
+    <fragment
+        android:id="@+id/marketplaceItemDetailsFragment"
+        android:name="com.example.campusrelay.ui.marketplace.MarketplaceItemDetailsFragment"
+        android:label="@string/marketplace_details_title"
+        tools:layout="@layout/fragment_marketplace_item_details" />
+
+    <!-- Carpool -->
+    <fragment
+        android:id="@+id/carpoolFragment"
+        android:name="com.example.campusrelay.ui.carpool.CarpoolFragment"
+        android:label="@string/carpool_title"
+        tools:layout="@layout/fragment_carpool">
+        <action
+            android:id="@+id/action_carpool_to_create_ride"
+            app:destination="@id/createRideOfferFragment" />
+        <action
+            android:id="@+id/action_carpool_to_ride_details"
+            app:destination="@id/rideDetailsFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/createRideOfferFragment"
+        android:name="com.example.campusrelay.ui.carpool.CreateRideOfferFragment"
+        android:label="@string/create_ride_title"
+        tools:layout="@layout/fragment_create_ride_offer" />
+
+    <fragment
+        android:id="@+id/rideDetailsFragment"
+        android:name="com.example.campusrelay.ui.carpool.RideDetailsFragment"
+        android:label="@string/ride_details_title"
+        tools:layout="@layout/fragment_ride_details" />
+
 </navigation>

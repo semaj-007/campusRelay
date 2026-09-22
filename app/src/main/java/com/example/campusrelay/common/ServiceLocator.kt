@@ -38,6 +38,14 @@ class ServiceLocator private constructor(context: Context) {
 
     val settingsRepository: SettingsRepository by lazy { SettingsRepository(preferencesManager) }
 
+    val marketplaceRepository: com.example.campusrelay.data.repository.MarketplaceRepository by lazy {
+        com.example.campusrelay.data.repository.MarketplaceRepository(apiService)
+    }
+
+    val carpoolRepository: com.example.campusrelay.data.repository.CarpoolRepository by lazy {
+        com.example.campusrelay.data.repository.CarpoolRepository(apiService)
+    }
+
     companion object {
         @Volatile private var instance: ServiceLocator? = null
 

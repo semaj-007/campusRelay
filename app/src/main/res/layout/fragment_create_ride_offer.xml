@@ -1,0 +1,213 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true"
+    tools:context=".ui.carpool.CreateRideOfferFragment">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="20dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/create_ride_title"
+            android:textColor="@color/relay_text_primary"
+            android:textSize="22sp"
+            android:textStyle="bold" />
+
+        <!-- Origin -->
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/layout_origin"
+            style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:hint="@string/create_ride_origin_label">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/edit_origin"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/create_ride_origin_hint"
+                android:inputType="text" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <!-- Destination -->
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/layout_destination"
+            style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:hint="@string/create_ride_destination_label">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/edit_destination"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/create_ride_destination_hint"
+                android:inputType="text" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <!-- Departure Date -->
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/layout_departure_date"
+            style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:hint="@string/create_ride_departure_date_label">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/edit_departure_date"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="date" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <!-- Departure Time -->
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/layout_departure_time"
+            style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:hint="@string/create_ride_departure_time_label">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/edit_departure_time"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="time" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <!-- Available Seats -->
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/layout_seats"
+            style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:hint="@string/create_ride_seats_label">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/edit_seats"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="number" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <!-- Vehicle Type -->
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/layout_vehicle_type"
+            style="@style/Widget.Material3.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:hint="@string/create_ride_vehicle_type_label">
+
+            <AutoCompleteTextView
+                android:id="@+id/dropdown_vehicle_type"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="none" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <!-- Price Per Seat -->
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/layout_price_per_seat"
+            style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:hint="@string/create_ride_price_label">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/edit_price_per_seat"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/create_ride_price_hint"
+                android:inputType="numberDecimal" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <!-- Recurring Ride Toggle -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/create_ride_recurring_label"
+                android:textColor="@color/relay_text_primary"
+                android:textStyle="bold" />
+
+            <com.google.android.material.switchmaterial.SwitchMaterial
+                android:id="@+id/switch_recurring"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:text="@string/create_ride_recurring_off"
+                android:textOff="@string/create_ride_recurring_off"
+                android:textOn="@string/create_ride_recurring_on" />
+        </LinearLayout>
+
+        <!-- Recurring Ride Options (initially hidden) -->
+        <LinearLayout
+            android:id="@+id/layout_recurring_options"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/layout_repeat"
+                style="@style/Widget.Material3.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/create_ride_repeat_label">
+
+                <AutoCompleteTextView
+                    android:id="@+id/dropdown_repeat"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="none" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/layout_until"
+                style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:hint="@string/create_ride_until_label">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/edit_until"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="date" />
+            </com.google.android.material.textfield.TextInputLayout>
+        </LinearLayout>
+
+        <!-- Create Ride Button -->
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/button_create_ride"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:text="@string/create_ride_create_button"
+            app:backgroundTint="@color/relay_green_primary" />
+
+    </LinearLayout>
+</ScrollView>

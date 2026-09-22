@@ -1,17 +1,24 @@
 package com.example.campusrelay.data.remote
 
+import com.example.campusrelay.data.model.ListingCategory
+import com.example.campusrelay.data.model.ListingCondition
+import com.example.campusrelay.data.model.ListingStatus
+import com.example.campusrelay.data.model.RideOfferStatus
+import com.example.campusrelay.data.model.VehicleType
 import com.example.campusrelay.data.remote.dto.AuthResponseDto
 import com.example.campusrelay.data.remote.dto.CreateDeliveryRequestDto
 import com.example.campusrelay.data.remote.dto.CreateDeliveryResponseDto
 import com.example.campusrelay.data.remote.dto.DeliveryFeedItemDto
 import com.example.campusrelay.data.remote.dto.DevLoginRequestDto
 import com.example.campusrelay.data.remote.dto.DevLoginResponseDto
+import com.example.campusrelay.data.remote.dto.MarketplaceDtos
 import com.example.campusrelay.data.remote.dto.OfflineSyncRequestDto
 import com.example.campusrelay.data.remote.dto.OfflineSyncResponseDto
 import com.example.campusrelay.data.remote.dto.SsoLoginRequestDto
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST
+import retrofit2.http.Path
 
 /**
  * The custom ASP.NET Core Web API described in the "REST API and Backend Architecture"
@@ -39,4 +46,27 @@ interface ApiService {
     // Endpoint 2: Synchronize Offline Handoff Transactions (REQ-OFF-2)
     @POST("api/v1/deliveries/sync-offline")
     suspend fun syncOfflineTransactions(@Body body: OfflineSyncRequestDto): OfflineSyncResponseDto
+
+    // Marketplace endpoints
+    @GET("api/v1/marketplace/listings")
+    suspend fun getMarketplaceListings(): List<MarketplaceDtos.MarketplaceListingDto>
+
+    @GET("api/v1/marketplace/listings/{id}")
+    suspend fun getMarketplaceListingById(@Path("id") id: String): MarketplaceDtos.MarketplaceListingDto
+
+    @POST("api/v1/marketplace/listings")
+    suspend fun createMarketplaceListing(@Body body: MarketplaceDtos.CreateListingRequest): MarketplaceDtos.MarketplaceListingDto
+
+    // Carpool endpoints
+    @GET("api/v1/carpool/ride-offers")
+    suspend fun getRideOffers(): List<CarpoolDtos.RideOfferDto>
+
+    @GET("api/v1/carpool/ride-offers/{id}")
+    suspend fun getRideOfferById(@Path("id") id: String): CarpoolDtos.RideOfferDto
+
+    @POST("api/v1/carpool/ride-offers")
+    suspend fun createRideOffer(@Body body: CarpoolDtos.CreateRideOfferRequest): CarpoolDtos.RideOfferDto
+
+    @POST("api/v1/carpool/ride-offers/{id}/request-seat")
+    suspend fun requestSeat(@Path("id") id: String, @Body body: CarpoolDtos.RequestSeatRequest): CarpoolDtos.RequestSeatResponse
 }
