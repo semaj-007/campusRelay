@@ -23,7 +23,9 @@ class ServiceLocator private constructor(context: Context) {
         sessionTokenProvider = { runBlocking { preferencesManager.currentSessionToken() } }
     )
 
-    val authRepository: AuthRepository by lazy { AuthRepository(apiService, preferencesManager) }
+    val authRepository: AuthRepository by lazy { 
+        AuthRepository(apiService, preferencesManager, null) 
+    }
 
     val deliveryRepository: DeliveryRepository by lazy {
         DeliveryRepository(

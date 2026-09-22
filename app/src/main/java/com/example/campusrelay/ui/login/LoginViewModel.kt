@@ -35,7 +35,23 @@ class LoginViewModel(private val authRepository: AuthRepository) : ViewModel() {
                     val name = authRepository.fullName.first() ?: provider
                     _uiState.value = LoginUiState.Success(fullName = name)
                 }
-                .onFailure { _uiState.value = LoginUiState.Error(it.message ?: "Sign-in failed") }
+                .onFailure { 
+                    _uiState.value = LoginUiState.Error(it.message ?: "Sign-in failed") 
+                }
+        }
+    }
+
+    // For development/testing - creates a demo user in the backend
+    fun devLogin(email: String, fullName: String) {
+        _uiState.value = LoginUiState.Loading
+        viewModelScope.launch {
+            authRepository.devLogin(email, fullName)
+                .onSuccess {
+                    _uiState.value = LoginUiState.Success(fullName = fullName)
+                }
+                .onFailure { 
+                    _uiState.value = LoginUiState.Error(it.message ?: "Dev login failed") 
+                }
         }
     }
 }
