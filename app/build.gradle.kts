@@ -14,8 +14,8 @@ android {
         buildConfigField("String", "API_BASE_URL", "\"${providers.gradleProperty("apiBaseUrl").getOrElse("https://10.0.2.2:5001/")}\"")
         buildConfigField("String", "GOOGLE_WEB_CLIENT_ID", "\"${providers.gradleProperty("googleWebClientId").getOrElse("")}\"")
         applicationId = "com.example.campusrelay"
-        minSdk = 37
-        targetSdk = 37
+        minSdk = 35
+        targetSdk = 35
         versionCode = 1
         versionName = "1.0"
 

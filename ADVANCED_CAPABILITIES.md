@@ -2,6 +2,8 @@
 
 ## Build and configure
 
+The app targets Android 15 (API 35), with minimum API 35. The compile SDK remains 37 to support the pinned AndroidX dependencies; this does not require an API 37 device.
+
 Use Java 21, the pinned Gradle 9.5 distribution, Android platform 37.0 and build tools 36.0.0.
 
 ```bash
@@ -46,7 +48,7 @@ English, isiZulu (`zu`) and Afrikaans (`af`) are declared in Android's per-app l
 
 ## Device acceptance checks
 
-On an API 37+ emulator/device, run `./gradlew :app:connectedDebugAndroidTest`. Instrumentation tests cover Room outbox persistence across database reopen and encrypted vault persistence. They use a test installation and clear that installation's session.
+On an Android 15 (API 35)+ emulator/device, run `./gradlew :app:connectedDebugAndroidTest`. Instrumentation tests cover Room outbox persistence across database reopen and encrypted vault persistence. They use a test installation and clear that installation's session.
 
 Also verify these native behaviors manually:
 
