@@ -1,5 +1,8 @@
 package com.example.campusrelay.ui.carpool
 
+import com.example.campusrelay.util.categoryLabel
+import com.example.campusrelay.util.conditionLabel
+import com.example.campusrelay.util.vehicleLabel
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -10,7 +13,6 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
-import androidx.navigation.fragment.navArgs
 import com.example.campusrelay.CampusRelayApp
 import com.example.campusrelay.R
 import com.example.campusrelay.databinding.FragmentRideDetailsBinding
@@ -23,12 +25,12 @@ import java.util.Locale
 class RideDetailsFragment : Fragment() {
 
     private var binding: FragmentRideDetailsBinding? = null
-    private val args: RideDetailsFragmentArgs by navArgs()
+    private val rideId: String get() = requireNotNull(requireArguments().getString("rideId"))
 
     private val viewModel: RideDetailsViewModel by viewModels {
         val app = requireActivity().application as CampusRelayApp
         ViewModelFactory {
-            RideDetailsViewModel(app.serviceLocator.carpoolRepository, args.rideId)
+            RideDetailsViewModel(app.serviceLocator.carpoolRepository, rideId)
         }
     }
 
@@ -72,10 +74,10 @@ class RideDetailsFragment : Fragment() {
                 b.textDate.text = dateFormat.format(rideOffer.departureTime)
                 b.textTime.text = timeFormat.format(rideOffer.departureTime)
 
-                b.textVehicleName.text = rideOffer.vehicleType.name
-                b.textVehicleType.text = rideOffer.vehicleType.name
+                b.textVehicleName.text = requireContext().vehicleLabel(rideOffer.vehicleType)
+                b.textVehicleType.text = requireContext().vehicleLabel(rideOffer.vehicleType)
                 b.textSeatsAvailable.text = rideOffer.availableSeats.toString()
-                b.textPricePerSeat.text = "R${"%.2f".format(rideOffer.pricePerSeat)} / seat"
+                b.textPricePerSeat.text = getString(R.string.ride_details_price_per_seat, rideOffer.pricePerSeat)
 
                 // TODO: Load driver info (name, rating, profile picture)
                 b.textDriverName.text = "Thabo"

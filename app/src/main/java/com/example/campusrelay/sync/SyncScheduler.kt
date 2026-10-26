@@ -17,10 +17,11 @@ object SyncScheduler {
             .build()
 
         val request = OneTimeWorkRequestBuilder<OfflineSyncWorker>()
+            .setBackoffCriteria(androidx.work.BackoffPolicy.EXPONENTIAL, 30, java.util.concurrent.TimeUnit.SECONDS)
             .setConstraints(constraints)
             .build()
 
         WorkManager.getInstance(context)
-            .enqueueUniqueWork(Constants.SYNC_WORK_NAME, ExistingWorkPolicy.REPLACE, request)
+            .enqueueUniqueWork(Constants.SYNC_WORK_NAME, ExistingWorkPolicy.APPEND_OR_REPLACE, request)
     }
 }

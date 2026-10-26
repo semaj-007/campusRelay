@@ -13,4 +13,5 @@
     <color name="relay_text_primary">#16221C</color>
     <color name="relay_text_secondary">#5B6B62</color>
     <color name="relay_error">#C0392B</color>
+    <color name="light_gray">#EEEEEE</color>
 </resources>

@@ -16,6 +16,12 @@ interface PendingDeliveryRequestDao {
     @Query("SELECT * FROM pending_delivery_requests")
     suspend fun getAll(): List<PendingDeliveryRequestEntity>
 
+    @Query("UPDATE pending_delivery_requests SET lastError = :error WHERE localId = :id")
+    suspend fun markFailed(id: String, error: String)
+
+    @Query("SELECT * FROM pending_delivery_requests ORDER BY createdAtIso")
+    fun observeAll(): kotlinx.coroutines.flow.Flow<List<PendingDeliveryRequestEntity>>
+
     @Delete
     suspend fun delete(request: PendingDeliveryRequestEntity)
 

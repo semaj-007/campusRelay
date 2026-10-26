@@ -93,7 +93,7 @@ class CarpoolRepository(
                 rideId = rideId,
                 passengerId = passengerId
             )
-            apiService.requestSeat(dto)
+            apiService.requestSeat(rideId, dto)
             true
         } catch (t: Throwable) {
             false

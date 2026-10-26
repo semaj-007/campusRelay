@@ -20,5 +20,6 @@ data class PendingDeliveryRequestEntity(
     val weightCategory: String,
     val rewardAmount: Double,
     val isEcoFriendlyRoute: Boolean,
-    val createdAtIso: String
+    val createdAtIso: String,
+    val lastError: String? = null
 )

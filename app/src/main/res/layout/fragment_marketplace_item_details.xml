@@ -25,7 +25,7 @@
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:src="@android:drawable/ic_menu_revert"
-                android:contentDescription="Back" />
+                android:contentDescription="@string/action_back" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -44,7 +44,7 @@
             android:layout_height="200dp"
             android:scaleType="centerCrop"
             android:background="@color/relay_surface"
-            android:contentDescription="Item photo" />
+            android:contentDescription="@string/item_photo" />
 
         <!-- Item Info -->
         <LinearLayout
@@ -101,7 +101,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
-                android:text="Description"
+                android:text="@string/create_listing_description_label"
                 android:textColor="@color/relay_text_primary"
                 android:textStyle="bold" />
 
@@ -141,7 +141,7 @@
                     android:layout_width="40dp"
                     android:layout_height="40dp"
                     android:src="@drawable/ic_launcher_foreground"
-                    android:contentDescription="Seller profile"
+                    android:contentDescription="@string/seller_profile"
                     android:scaleType="centerCrop" />
 
                 <TextView

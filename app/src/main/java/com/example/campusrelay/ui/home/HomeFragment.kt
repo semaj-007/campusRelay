@@ -69,6 +69,20 @@ class HomeFragment : Fragment() {
                     }
                 }
                 launch {
+                    val locator = (requireActivity().application as CampusRelayApp).serviceLocator
+                    val userId = locator.preferencesManager.currentUserId()
+                    locator.deliveryRepository.pendingRequests.collect { all ->
+                        val mine = all.filter { it.senderId == userId }
+                        b.textSyncStatus.visibility = if (mine.isEmpty()) View.GONE else View.VISIBLE
+                        b.textSyncStatus.text = getString(R.string.sync_pending, mine.count { it.lastError == null }, mine.count { it.lastError != null })
+                        b.textSyncStatus.setOnClickListener {
+                            androidx.appcompat.app.AlertDialog.Builder(requireContext())
+                                .setMessage(mine.joinToString("\n") { it.itemDescription + if (it.lastError == null) "" else " — " + it.lastError })
+                                .setPositiveButton(R.string.action_ok, null).show()
+                        }
+                    }
+                }
+                launch {
                     viewModel.ecoScoreKg.collect { kg ->
                         val unit = getString(R.string.home_eco_score_unit)
                         b.textEcoScore.text = "%.1f %s".format(kg, unit)

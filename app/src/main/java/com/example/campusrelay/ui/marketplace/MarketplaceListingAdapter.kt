@@ -1,5 +1,8 @@
 package com.example.campusrelay.ui.marketplace
 
+import com.example.campusrelay.util.categoryLabel
+import com.example.campusrelay.util.conditionLabel
+import com.example.campusrelay.util.vehicleLabel
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
@@ -29,15 +32,15 @@ class MarketplaceListingAdapter(
         fun bind(listing: MarketplaceListing) {
             binding.textItemTitle.text = listing.title
             binding.textItemPrice.text = "R${"%.2f".format(listing.price)}"
-            binding.textItemCondition.text = listing.condition.name.replace("_", " ")
-            binding.textItemCategory.text = listing.category.name.replace("_", " ")
+            binding.textItemCondition.text = binding.root.context.conditionLabel(listing.condition)
+            binding.textItemCategory.text = binding.root.context.categoryLabel(listing.category)
 
             // Load first photo if available
             if (listing.photoUrls.isNotEmpty()) {
                 Glide.with(binding.imageItemPhoto.context)
                     .load(listing.photoUrls.first())
                     .centerCrop()
-                    .placeholder(android.R.color.light_gray)
+                    .placeholder(com.example.campusrelay.R.color.light_gray)
                     .into(binding.imageItemPhoto)
             }
 

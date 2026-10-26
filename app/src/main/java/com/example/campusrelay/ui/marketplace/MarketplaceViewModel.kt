@@ -9,6 +9,8 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.launch
 
 /** ViewModel for the Marketplace feature. */
@@ -31,7 +33,7 @@ class MarketplaceViewModel(
                      listing.description.contains(searchQuery, ignoreCase = true))
         }
         MarketplaceUiState(filtered, isLoading)
-    }.asStateFlow()
+    }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), MarketplaceUiState(emptyList(), false))
 
     init {
         loadListings()

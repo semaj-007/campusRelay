@@ -19,7 +19,7 @@ import com.example.campusrelay.data.local.entity.PendingDeliveryRequestEntity
         CachedDeliveryEntity::class,
         PendingDeliveryRequestEntity::class
     ],
-    version = 1,
+    version = 2,
     exportSchema = false
 )
 abstract class AppDatabase : RoomDatabase() {
@@ -36,7 +36,11 @@ abstract class AppDatabase : RoomDatabase() {
                     context.applicationContext,
                     AppDatabase::class.java,
                     Constants.DATABASE_NAME
-                ).build().also { instance = it }
+                ).addMigrations(object : androidx.room.migration.Migration(1, 2) {
+                    override fun migrate(db: androidx.sqlite.db.SupportSQLiteDatabase) {
+                        db.execSQL("ALTER TABLE pending_delivery_requests ADD COLUMN lastError TEXT DEFAULT NULL")
+                    }
+                }).build().also { instance = it }
             }
     }
 }

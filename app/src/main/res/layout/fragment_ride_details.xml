@@ -25,7 +25,7 @@
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:src="@android:drawable/ic_menu_revert"
-                android:contentDescription="Back" />
+                android:contentDescription="@string/action_back" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -64,7 +64,7 @@
                     android:layout_marginStart="8dp"
                     android:layout_marginEnd="8dp"
                     android:src="@android:drawable/arrow_down_float"
-                    android:contentDescription="To" />
+                    android:contentDescription="@string/carpool_where_to_label" />
 
                 <TextView
                     android:id="@+id/text_destination"
@@ -126,7 +126,7 @@
                     android:layout_width="24dp"
                     android:layout_height="24dp"
                     android:src="@drawable/ic_carpool"
-                    android:contentDescription="Vehicle" />
+                    android:contentDescription="@string/ride_details_vehicle_label" />
 
                 <TextView
                     android:id="@+id/text_vehicle_name"
@@ -213,7 +213,7 @@
                     android:layout_width="40dp"
                     android:layout_height="40dp"
                     android:src="@drawable/ic_launcher_foreground"
-                    android:contentDescription="Driver profile"
+                    android:contentDescription="@string/driver_profile"
                     android:scaleType="centerCrop" />
 
                 <TextView

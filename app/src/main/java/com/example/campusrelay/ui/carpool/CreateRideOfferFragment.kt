@@ -14,7 +14,6 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import com.example.campusrelay.CampusRelayApp
 import com.example.campusrelay.R
-import com.example.campusrelay.data.model.RecurrenceRule
 import com.example.campusrelay.data.model.RideOfferStatus
 import com.example.campusrelay.data.model.VehicleType
 import com.example.campusrelay.databinding.FragmentCreateRideOfferBinding
@@ -53,7 +52,7 @@ class CreateRideOfferFragment : Fragment() {
         b.dropdownVehicleType.setAdapter(vehicleTypeAdapter)
 
         // Setup recurrence dropdown
-        val recurrenceTypes = listOf("Weekly", "Monthly")
+        val recurrenceTypes = listOf(getString(R.string.recurrence_weekly), getString(R.string.recurrence_monthly))
         val recurrenceAdapter = ArrayAdapter(requireContext(), android.R.layout.simple_list_item_1, recurrenceTypes)
         b.dropdownRepeat.setAdapter(recurrenceAdapter)
 
@@ -98,7 +97,7 @@ class CreateRideOfferFragment : Fragment() {
                 val untilDate = try { dateFormat.parse(untilText) } catch (e: Exception) { null }
 
                 recurrenceRule = if (repeatIndex != -1 && untilDate != null) {
-                    RecurrenceRule.WEEKLY.toString() // Simplified for now
+                    if (repeatIndex == 0) "WEEKLY" else "MONTHLY" // Simplified for now
                 } else {
                     null
                 }

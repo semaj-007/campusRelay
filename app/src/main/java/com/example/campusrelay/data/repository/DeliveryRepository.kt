@@ -25,12 +25,13 @@ class DeliveryRepository(
     private val apiService: ApiService,
     private val cachedDeliveryDao: CachedDeliveryDao,
     private val pendingDeliveryRequestDao: PendingDeliveryRequestDao,
-    private val preferencesManager: PreferencesManager
+    private val preferencesManager: PreferencesManager,
+    private val scheduleSync: () -> Unit
 ) {
-    private val isoFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.US)
+    val pendingRequests = pendingDeliveryRequestDao.observeAll()
 
     /** Home Dashboard feed: try the network, cache what comes back, and fall back to the
-     * local cache (or, on a completely fresh install, a small seed list) when offline. */
+     * local cache when offline. */
     suspend fun getFeed(): Resource<List<DeliveryFeedItem>> {
         return try {
             val remote = apiService.getDeliveryFeed()
@@ -42,14 +43,16 @@ class DeliveryRepository(
                     dropoffBuildingName = it.dropoffBuilding,
                     rewardAmount = it.rewardAmount,
                     distanceKm = it.distanceKm,
-                    status = runCatching { DeliveryStatus.valueOf(it.status) }.getOrDefault(DeliveryStatus.ACTIVE)
+                    status = runCatching { DeliveryStatus.valueOf(it.status.uppercase(Locale.ROOT)) }.getOrDefault(DeliveryStatus.ACTIVE)
                 )
             }
-            cachedDeliveryDao.upsertAll(items.map(::toEntity))
+            cachedDeliveryDao.replaceAll(items.map(::toEntity))
             Resource.Success(items)
-        } catch (t: Throwable) {
+        } catch (t: retrofit2.HttpException) {
+            Resource.Success(cachedDeliveryDao.getAll().map(::toModel), fromCache = true)
+        } catch (t: java.io.IOException) {
             val cached = cachedDeliveryDao.getAll()
-            val items = if (cached.isNotEmpty()) cached.map(::toModel) else seedFeed()
+            val items = cached.map(::toModel)
             Resource.Success(items, fromCache = true)
         }
     }
@@ -63,61 +66,53 @@ class DeliveryRepository(
         rewardAmount: Double,
         isEcoFriendlyRoute: Boolean
     ): Resource<Boolean> {
-        val senderId = "usr_local_demo"
-        val dto = CreateDeliveryRequestDto(
-            senderId = senderId,
-            pickupBuilding = pickupBuilding,
-            dropoffBuilding = dropoffBuilding,
-            itemDescription = itemDescription,
-            weightCategory = weightCategory,
-            rewardAmount = rewardAmount,
-            isEcoFriendlyRoute = isEcoFriendlyRoute
+        val senderId = preferencesManager.currentUserId()
+            ?: return Resource.Error("Sign in before creating a delivery")
+        val request = PendingDeliveryRequestEntity(
+            localId = UUID.randomUUID().toString(), senderId = senderId,
+            pickupBuilding = pickupBuilding, dropoffBuilding = dropoffBuilding,
+            itemDescription = itemDescription, weightCategory = weightCategory,
+            rewardAmount = rewardAmount, isEcoFriendlyRoute = isEcoFriendlyRoute,
+            createdAtIso = java.time.Instant.now().toString()
         )
-
+        // Durable outbox first: process death or a lost HTTP response cannot lose the action.
+        pendingDeliveryRequestDao.enqueue(request)
+        scheduleSync()
+        if (preferencesManager.currentSessionToken() == null) return Resource.Success(false)
         return try {
-            apiService.createDeliveryRequest(dto)
+            send(request)
+            pendingDeliveryRequestDao.delete(request)
             awardEcoScoreIfApplicable(pickupBuilding, dropoffBuilding, isEcoFriendlyRoute)
             Resource.Success(true)
-        } catch (t: Throwable) {
-            pendingDeliveryRequestDao.enqueue(
-                PendingDeliveryRequestEntity(
-                    localId = UUID.randomUUID().toString(),
-                    senderId = senderId,
-                    pickupBuilding = pickupBuilding,
-                    dropoffBuilding = dropoffBuilding,
-                    itemDescription = itemDescription,
-                    weightCategory = weightCategory,
-                    rewardAmount = rewardAmount,
-                    isEcoFriendlyRoute = isEcoFriendlyRoute,
-                    createdAtIso = isoFormat.format(Date())
-                )
-            )
-            awardEcoScoreIfApplicable(pickupBuilding, dropoffBuilding, isEcoFriendlyRoute)
-            Resource.Success(false) // false == queued offline, not yet confirmed by the server
-        }
+        } catch (e: kotlinx.coroutines.CancellationException) { throw e
+        } catch (e: retrofit2.HttpException) {
+            if (e.code() in listOf(401, 403) || e.code() == 408 || e.code() == 429 || e.code() >= 500) Resource.Success(false)
+            else {
+                pendingDeliveryRequestDao.markFailed(request.localId, "HTTP ${e.code()}")
+                Resource.Error("Request rejected: HTTP ${e.code()}")
+            }
+        } catch (e: java.io.IOException) { Resource.Success(false) }
     }
 
-    /** Called by [com.example.campusrelay.sync.OfflineSyncWorker] once connectivity returns. */
+    private suspend fun send(request: PendingDeliveryRequestEntity) {
+        check(preferencesManager.currentSessionToken() != null) { "Unlock your session before syncing" }
+        apiService.createDeliveryRequest(CreateDeliveryRequestDto(
+            senderId = request.senderId, pickupBuilding = request.pickupBuilding,
+            dropoffBuilding = request.dropoffBuilding, itemDescription = request.itemDescription,
+            weightCategory = request.weightCategory, rewardAmount = request.rewardAmount,
+            isEcoFriendlyRoute = request.isEcoFriendlyRoute, clientRequestId = request.localId
+        ))
+    }
+
+    /** Only the signed-in account's queue is sent. Rejected rows remain available locally. */
     suspend fun flushPendingRequests(): Int {
-        val pending = pendingDeliveryRequestDao.getAll()
-        var flushed = 0
-        for (request in pending) {
-            val dto = CreateDeliveryRequestDto(
-                senderId = request.senderId,
-                pickupBuilding = request.pickupBuilding,
-                dropoffBuilding = request.dropoffBuilding,
-                itemDescription = request.itemDescription,
-                weightCategory = request.weightCategory,
-                rewardAmount = request.rewardAmount,
-                isEcoFriendlyRoute = request.isEcoFriendlyRoute
-            )
-            val succeeded = runCatching { apiService.createDeliveryRequest(dto) }.isSuccess
-            if (succeeded) {
-                pendingDeliveryRequestDao.delete(request)
-                flushed++
-            }
-        }
-        return flushed
+        val user = preferencesManager.currentUserId() ?: return 0
+        return com.example.campusrelay.sync.flushDeliveryOutbox(
+            pendingDeliveryRequestDao.getAll().filter { it.senderId == user && it.lastError == null },
+            send = ::send,
+            acknowledge = { pendingDeliveryRequestDao.delete(it) },
+            reject = { request, error -> pendingDeliveryRequestDao.markFailed(request.localId, error) }
+        )
     }
 
     // REQ-ECO-1 / REQ-ECO-2
@@ -127,12 +122,6 @@ class DeliveryRepository(
         val kgSaved = EcoScoreCalculator.forDelivery(distanceKm)
         preferencesManager.addEcoScore(kgSaved)
     }
-
-    private fun seedFeed(): List<DeliveryFeedItem> = listOf(
-        DeliveryFeedItem("del_seed_1", "PROG7311 Textbook & Notes", "Engineering Block B", "Merensky Library", 35.0, 0.6, DeliveryStatus.ACTIVE),
-        DeliveryFeedItem("del_seed_2", "Forgotten laptop charger", "Res Village A", "Client Service Centre", 25.0, 1.4, DeliveryStatus.ACTIVE),
-        DeliveryFeedItem("del_seed_3", "Signed permission form", "Student Centre", "Law Building", 15.0, 0.9, DeliveryStatus.MATCHED)
-    )
 
     private fun toEntity(item: DeliveryFeedItem) = CachedDeliveryEntity(
         deliveryId = item.deliveryId,

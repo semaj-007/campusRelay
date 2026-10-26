@@ -23,8 +23,8 @@ class ServiceLocator private constructor(context: Context) {
         sessionTokenProvider = { runBlocking { preferencesManager.currentSessionToken() } }
     )
 
-    val authRepository: AuthRepository by lazy { 
-        AuthRepository(apiService, preferencesManager, null) 
+    val authRepository: AuthRepository by lazy {
+        AuthRepository(apiService, preferencesManager)
     }
 
     val deliveryRepository: DeliveryRepository by lazy {
@@ -32,7 +32,8 @@ class ServiceLocator private constructor(context: Context) {
             apiService = apiService,
             cachedDeliveryDao = appDatabase.cachedDeliveryDao(),
             pendingDeliveryRequestDao = appDatabase.pendingDeliveryRequestDao(),
-            preferencesManager = preferencesManager
+            preferencesManager = preferencesManager,
+            scheduleSync = { com.example.campusrelay.sync.SyncScheduler.scheduleSyncWhenOnline(context) }
         )
     }
 

@@ -27,10 +27,10 @@ class LoginViewModel(private val authRepository: AuthRepository) : ViewModel() {
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), false)
 
     // REQ-AUTH-1 / REQ-AUTH-3, REQ-BIO-1
-    fun signIn(provider: String) {
+    fun signIn(provider: String, activity: android.app.Activity) {
         _uiState.value = LoginUiState.Loading
         viewModelScope.launch {
-            authRepository.signInWithSso(provider)
+            authRepository.signInWithSso(provider, activity)
                 .onSuccess {
                     val name = authRepository.fullName.first() ?: provider
                     _uiState.value = LoginUiState.Success(fullName = name)
@@ -38,6 +38,15 @@ class LoginViewModel(private val authRepository: AuthRepository) : ViewModel() {
                 .onFailure { 
                     _uiState.value = LoginUiState.Error(it.message ?: "Sign-in failed") 
                 }
+        }
+    }
+
+    fun signInWithGoogleToken(token: String) {
+        _uiState.value = LoginUiState.Loading
+        viewModelScope.launch {
+            authRepository.signInWithGoogleToken(token)
+                .onSuccess { _uiState.value = LoginUiState.Success(authRepository.fullName.first().orEmpty()) }
+                .onFailure { _uiState.value = LoginUiState.Error(it.message ?: "Sign-in failed") }
         }
     }
 
