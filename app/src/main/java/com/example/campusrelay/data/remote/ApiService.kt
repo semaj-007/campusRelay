@@ -5,6 +5,7 @@ import com.example.campusrelay.data.model.ListingCondition
 import com.example.campusrelay.data.model.ListingStatus
 import com.example.campusrelay.data.model.RideOfferStatus
 import com.example.campusrelay.data.model.VehicleType
+import com.example.campusrelay.data.remote.dto.CarpoolDtos
 import com.example.campusrelay.data.remote.dto.AuthResponseDto
 import com.example.campusrelay.data.remote.dto.CreateDeliveryRequestDto
 import com.example.campusrelay.data.remote.dto.CreateDeliveryResponseDto
@@ -26,6 +27,12 @@ import retrofit2.http.Path
  * response is plain JSON (REQ-API-2) - Retrofit + the Gson converter handle both for us.
  */
 interface ApiService {
+    @POST("api/v1/devices")
+    suspend fun registerDevice(@Body body: com.example.campusrelay.notifications.DeviceRegistration)
+
+    @retrofit2.http.HTTP(method = "DELETE", path = "api/v1/devices", hasBody = true)
+    suspend fun unregisterDevice(@Body body: com.example.campusrelay.notifications.DeviceRegistration)
+
 
     // REQ-AUTH-1: Firebase SSO login - sends Firebase ID token to backend
     @POST("api/v1/auth/sso")

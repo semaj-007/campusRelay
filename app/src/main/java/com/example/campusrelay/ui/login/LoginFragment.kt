@@ -27,6 +27,16 @@ import kotlinx.coroutines.launch
 /** Login screen (REQ-AUTH-1, REQ-AUTH-2, REQ-BIO-1, login screen spec from Part 1). */
 class LoginFragment : Fragment() {
 
+    private val googleSignIn = registerForActivityResult(androidx.activity.result.contract.ActivityResultContracts.StartActivityForResult()) { result ->
+        try {
+            val account = com.google.android.gms.auth.api.signin.GoogleSignIn.getSignedInAccountFromIntent(result.data)
+                .getResult(com.google.android.gms.common.api.ApiException::class.java)
+            val token = account.idToken ?: error("Missing Google ID token")
+            viewModel.signInWithGoogleToken(token)
+        } catch (_: Exception) {
+            Toast.makeText(requireContext(), R.string.login_failed, Toast.LENGTH_LONG).show()
+        }
+    }
     private var binding: FragmentLoginBinding? = null
 
     private val viewModel: LoginViewModel by viewModels {
@@ -45,8 +55,18 @@ class LoginFragment : Fragment() {
 
         setUpLanguageDropdown(b)
 
-        b.buttonSsoGoogle.setOnClickListener { viewModel.signIn("Google") }
-        b.buttonSsoMicrosoft.setOnClickListener { viewModel.signIn("Microsoft") }
+        b.buttonSsoGoogle.setOnClickListener {
+            val resourceId = resources.getIdentifier("default_web_client_id", "string", requireContext().packageName)
+            val clientId = if (resourceId != 0) getString(resourceId) else com.example.campusrelay.BuildConfig.GOOGLE_WEB_CLIENT_ID
+            if (clientId.isBlank()) {
+                Toast.makeText(requireContext(), R.string.login_configuration_required, Toast.LENGTH_LONG).show()
+                return@setOnClickListener
+            }
+            val options = com.google.android.gms.auth.api.signin.GoogleSignInOptions.Builder(com.google.android.gms.auth.api.signin.GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken(clientId).requestEmail().build()
+            googleSignIn.launch(com.google.android.gms.auth.api.signin.GoogleSignIn.getClient(requireActivity(), options).signInIntent)
+        }
+        b.buttonSsoMicrosoft.setOnClickListener { viewModel.signIn("Microsoft", requireActivity()) }
         b.buttonBiometric.setOnClickListener { launchBiometricPrompt() }
 
         viewLifecycleOwner.lifecycleScope.launch {
@@ -91,39 +111,16 @@ class LoginFragment : Fragment() {
         )
         val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_list_item_1, languages.map { it.first })
         b.dropdownLanguage.setAdapter(adapter)
-        b.dropdownLanguage.setText(languages.first().first, false)
+        val selected = AppCompatDelegate.getApplicationLocales().toLanguageTags().substringBefore(',').ifBlank { "en" }
+        b.dropdownLanguage.setText(languages.firstOrNull { it.second == selected }?.first ?: languages.first().first, false)
         b.dropdownLanguage.setOnItemClickListener { _, _, position, _ ->
             val code = languages[position].second
             AppCompatDelegate.setApplicationLocales(LocaleListCompat.forLanguageTags(code))
         }
     }
 
-    // REQ-BIO-1 / REQ-BIO-2
     private fun launchBiometricPrompt() {
-        val context = requireContext()
-        val biometricManager = BiometricManager.from(context)
-        val canAuthenticate = biometricManager.canAuthenticate(BiometricManager.Authenticators.BIOMETRIC_WEAK)
-        if (canAuthenticate != BiometricManager.BIOMETRIC_SUCCESS) {
-            Toast.makeText(context, R.string.login_biometric_unavailable, Toast.LENGTH_SHORT).show()
-            return
-        }
-
-        val executor = ContextCompat.getMainExecutor(context)
-        val prompt = BiometricPrompt(this, executor, object : BiometricPrompt.AuthenticationCallback() {
-            override fun onAuthenticationSucceeded(result: BiometricPrompt.AuthenticationResult) {
-                super.onAuthenticationSucceeded(result)
-                viewModel.signIn("Biometric")
-            }
-        })
-
-        val promptInfo = BiometricPrompt.PromptInfo.Builder()
-            .setTitle(getString(R.string.login_biometric_prompt_title))
-            .setSubtitle(getString(R.string.login_biometric_prompt_subtitle))
-            .setAllowedAuthenticators(BiometricManager.Authenticators.BIOMETRIC_WEAK)
-            .setNegativeButtonText(getString(R.string.action_cancel))
-            .build()
-
-        prompt.authenticate(promptInfo)
+        (requireActivity() as com.example.campusrelay.MainActivity).authenticateSession(false) { navigateToHome() }
     }
 
     private fun navigateToHome() {

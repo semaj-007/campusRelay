@@ -12,6 +12,12 @@ interface CachedDeliveryDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun upsertAll(deliveries: List<CachedDeliveryEntity>)
 
+    @androidx.room.Transaction
+    suspend fun replaceAll(deliveries: List<CachedDeliveryEntity>) {
+        clear()
+        upsertAll(deliveries)
+    }
+
     @Query("SELECT * FROM cached_deliveries ORDER BY distanceKm ASC")
     suspend fun getAll(): List<CachedDeliveryEntity>
 

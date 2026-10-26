@@ -1,5 +1,8 @@
 package com.example.campusrelay.ui.marketplace
 
+import com.example.campusrelay.util.categoryLabel
+import com.example.campusrelay.util.conditionLabel
+import com.example.campusrelay.util.vehicleLabel
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -10,7 +13,6 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
-import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
 import com.example.campusrelay.CampusRelayApp
 import com.example.campusrelay.R
@@ -22,12 +24,12 @@ import kotlinx.coroutines.launch
 class MarketplaceItemDetailsFragment : Fragment() {
 
     private var binding: FragmentMarketplaceItemDetailsBinding? = null
-    private val args: MarketplaceItemDetailsFragmentArgs by navArgs()
+    private val listingId: String get() = requireNotNull(requireArguments().getString("listingId"))
 
     private val viewModel: MarketplaceItemDetailsViewModel by viewModels {
         val app = requireActivity().application as CampusRelayApp
         ViewModelFactory {
-            MarketplaceItemDetailsViewModel(app.serviceLocator.marketplaceRepository, args.listingId)
+            MarketplaceItemDetailsViewModel(app.serviceLocator.marketplaceRepository, listingId)
         }
     }
 
@@ -70,8 +72,8 @@ class MarketplaceItemDetailsFragment : Fragment() {
                 val listing = state.listing
                 b.textItemTitle.text = listing.title
                 b.textItemPrice.text = "R${"%.2f".format(listing.price)}"
-                b.textItemCategory.text = "Category: ${listing.category.name.replace("_", " ")}"
-                b.textItemCondition.text = "Condition: ${listing.condition.name.replace("_", " ")}"
+                b.textItemCategory.text = getString(R.string.category_label, requireContext().categoryLabel(listing.category))
+                b.textItemCondition.text = getString(R.string.condition_label, requireContext().conditionLabel(listing.condition))
                 b.textItemDescription.text = listing.description
 
                 // Load first photo if available
@@ -79,7 +81,7 @@ class MarketplaceItemDetailsFragment : Fragment() {
                     Glide.with(requireContext())
                         .load(listing.photoUrls.first())
                         .centerCrop()
-                        .placeholder(android.R.color.light_gray)
+                        .placeholder(com.example.campusrelay.R.color.light_gray)
                         .into(b.imageItemPhoto)
                 }
 

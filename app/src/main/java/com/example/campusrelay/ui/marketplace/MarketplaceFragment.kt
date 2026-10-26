@@ -42,8 +42,7 @@ class MarketplaceFragment : Fragment() {
         val b = binding ?: return
 
         adapter = MarketplaceListingAdapter(onItemClick = { listing ->
-            val action = MarketplaceFragmentDirections.actionMarketplaceToListingDetails(listing.id)
-            findNavController().navigate(action)
+            findNavController().navigate(R.id.action_marketplace_to_listing_details, androidx.core.os.bundleOf("listingId" to listing.id))
         })
         b.recyclerListings.layoutManager = LinearLayoutManager(requireContext())
         b.recyclerListings.adapter = adapter

@@ -21,6 +21,7 @@ private val Context.dataStore by preferencesDataStore(name = Constants.PREFS_DAT
  * [com.example.campusrelay.common.ServiceLocator] for how it's wired up.
  */
 class PreferencesManager(private val context: Context) {
+    val sessionVault = com.example.campusrelay.security.SessionVault(context)
 
     private object Keys {
         val USER_ID = stringPreferencesKey("user_id")
@@ -37,30 +38,42 @@ class PreferencesManager(private val context: Context) {
         val ECO_SCORE = stringPreferencesKey("eco_score_kg")
     }
 
-    val isSignedIn: Flow<Boolean> = context.dataStore.data.map { !it[Keys.SESSION_TOKEN].isNullOrBlank() }
+    val isSignedIn: Flow<Boolean> = context.dataStore.data.map { it[Keys.USER_ID] != null && sessionVault.hasSession }
     val fullName: Flow<String?> = context.dataStore.data.map { it[Keys.FULL_NAME] }
     val email: Flow<String?> = context.dataStore.data.map { it[Keys.EMAIL] }
     val bio: Flow<String?> = context.dataStore.data.map { it[Keys.BIO] }
     val campusLocation: Flow<String?> = context.dataStore.data.map { it[Keys.CAMPUS_LOCATION] }
     val languageCode: Flow<String> = context.dataStore.data.map { it[Keys.LANGUAGE_CODE] ?: Constants.LANGUAGE_ENGLISH }
     val darkMode: Flow<Boolean> = context.dataStore.data.map { it[Keys.DARK_MODE] ?: false }
-    val biometricLockEnabled: Flow<Boolean> = context.dataStore.data.map { it[Keys.BIOMETRIC_LOCK] ?: false }
+    val biometricLockEnabled: Flow<Boolean> = context.dataStore.data.map { sessionVault.protected }
     val notifyDeliveryEnabled: Flow<Boolean> = context.dataStore.data.map { it[Keys.NOTIFY_DELIVERY] ?: true }
     val notifyChatEnabled: Flow<Boolean> = context.dataStore.data.map { it[Keys.NOTIFY_CHAT] ?: true }
     val ecoScoreKg: Flow<Double> = context.dataStore.data.map { it[Keys.ECO_SCORE]?.toDoubleOrNull() ?: 0.0 }
 
-    suspend fun currentSessionToken(): String? = context.dataStore.data.first()[Keys.SESSION_TOKEN]
+    suspend fun currentUserId(): String? = context.dataStore.data.first()[Keys.USER_ID]
+
+    suspend fun currentSessionToken(): String? = sessionVault.token()
+
+    suspend fun migrateSession() {
+        val legacy = context.dataStore.data.first()[Keys.SESSION_TOKEN]
+        if (legacy != null) {
+            sessionVault.save(legacy)
+            context.dataStore.edit { it.remove(Keys.SESSION_TOKEN) }
+        }
+    }
 
     suspend fun saveSession(userId: String, fullName: String, email: String, token: String) {
+        sessionVault.save(token)
         context.dataStore.edit { prefs ->
             prefs[Keys.USER_ID] = userId
             prefs[Keys.FULL_NAME] = fullName
             prefs[Keys.EMAIL] = email
-            prefs[Keys.SESSION_TOKEN] = token
+            prefs.remove(Keys.SESSION_TOKEN)
         }
     }
 
     suspend fun clearSession() {
+        sessionVault.clear()
         context.dataStore.edit { prefs ->
             prefs.remove(Keys.USER_ID)
             prefs.remove(Keys.SESSION_TOKEN)

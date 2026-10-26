@@ -11,6 +11,7 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
 data class SettingsUiState(
+    val loaded: Boolean = false,
     val fullName: String = "",
     val email: String = "",
     val bio: String = "",
@@ -42,6 +43,7 @@ class SettingsViewModel(
         }
     ) { profileFields, prefs ->
         prefs.copy(
+            loaded = true,
             fullName = profileFields[0],
             email = profileFields[1],
             bio = profileFields[2],
@@ -50,10 +52,11 @@ class SettingsViewModel(
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), SettingsUiState())
 
     // REQ-SET-1, REQ-SET-2, REQ-LANG-1
-    fun save(bio: String, campusLocation: String, languageCode: String, darkMode: Boolean, biometricLock: Boolean, notifyDelivery: Boolean, notifyChat: Boolean) {
+    fun save(bio: String, campusLocation: String, languageCode: String, darkMode: Boolean, biometricLock: Boolean, notifyDelivery: Boolean, notifyChat: Boolean, onDone: () -> Unit = {}) {
         viewModelScope.launch {
             settingsRepository.updateProfile(bio, campusLocation)
             settingsRepository.savePreferences(languageCode, darkMode, biometricLock, notifyDelivery, notifyChat)
+            onDone()
         }
     }
 

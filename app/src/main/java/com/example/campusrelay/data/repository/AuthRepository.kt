@@ -1,21 +1,14 @@
 package com.example.campusrelay.data.repository
 
 import android.app.Activity
-import android.content.Intent
 import com.example.campusrelay.common.PreferencesManager
 import com.example.campusrelay.data.remote.ApiService
-import com.example.campusrelay.data.remote.dto.AuthResponseDto
 import com.example.campusrelay.data.remote.dto.SsoLoginRequestDto
-import com.google.android.gms.auth.api.signin.GoogleSignIn
-import com.google.android.gms.auth.api.signin.GoogleSignInClient
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions
-import com.google.android.gms.common.api.ApiException
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.auth.OAuthProvider
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.tasks.await
-import java.util.UUID
 
 /**
  * REQ-AUTH-1 / REQ-AUTH-2 / REQ-AUTH-3.
@@ -25,8 +18,7 @@ import java.util.UUID
  */
 class AuthRepository(
     private val apiService: ApiService,
-    private val preferencesManager: PreferencesManager,
-    private val activity: Activity? = null
+    private val preferencesManager: PreferencesManager
 ) {
     val isSignedIn: Flow<Boolean> = preferencesManager.isSignedIn
     val fullName: Flow<String?> = preferencesManager.fullName
@@ -34,10 +26,9 @@ class AuthRepository(
 
     private val firebaseAuth: FirebaseAuth by lazy { FirebaseAuth.getInstance() }
 
-    suspend fun signInWithSso(provider: String): Result<Unit> = runCatching {
+    suspend fun signInWithSso(provider: String, activity: Activity): Result<Unit> = runCatching {
         val firebaseUser = when (provider.lowercase()) {
-            "google" -> authenticateWithGoogle()
-            "microsoft" -> authenticateWithMicrosoft()
+            "microsoft" -> authenticateWithMicrosoft(activity)
             else -> throw IllegalArgumentException("Unsupported provider: $provider")
         }
 
@@ -56,32 +47,32 @@ class AuthRepository(
         )
     }
 
-    private suspend fun authenticateWithGoogle(): com.google.firebase.auth.FirebaseUser {
-        val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-            .requestIdToken("72996635117-m35khe2bqe3pb01oara9eqsr01r25j23.apps.googleusercontent.com")  // Replace with your Firebase Web Client ID
-            .requestEmail()
-            .build()
-
-        val googleSignInClient = GoogleSignIn.getClient(activity ?: throw IllegalStateException("Activity required for Google sign-in"), gso)
-        
-        // Note: For actual implementation, you need to start the sign-in activity
-        // This is a simplified version - in production use proper activity result handling
-        val account = googleSignInClient.silentSignIn().await()
-        val credential = GoogleAuthProvider.getCredential(account?.idToken, null)
-        val result = firebaseAuth.signInWithCredential(credential).await()
-        return result.user ?: throw IllegalStateException("Google sign-in failed")
+    suspend fun signInWithGoogleToken(idToken: String): Result<Unit> = runCatching {
+        val result = firebaseAuth.signInWithCredential(GoogleAuthProvider.getCredential(idToken, null)).await()
+        val user = result.user ?: error("Google sign-in failed")
+        val firebaseToken = user.getIdToken(true).await().token ?: error("Missing Firebase token")
+        val response = apiService.ssoLogin(SsoLoginRequestDto("google", firebaseToken))
+        preferencesManager.saveSession(response.userId, response.fullName, response.email, response.accessToken)
     }
 
-    private suspend fun authenticateWithMicrosoft(): com.google.firebase.auth.FirebaseUser {
+    private suspend fun authenticateWithMicrosoft(activity: Activity): com.google.firebase.auth.FirebaseUser {
         val provider = OAuthProvider.newBuilder("microsoft.com").build()
-        // Note: For actual implementation, use proper activity result handling
-        val result = firebaseAuth.signInWithProvider(activity ?: throw IllegalStateException("Activity required"), provider).await()
+        val result = firebaseAuth.startActivityForSignInWithProvider(activity, provider).await()
         return result.user ?: throw IllegalStateException("Microsoft sign-in failed")
     }
 
     suspend fun signOut() {
-        firebaseAuth.signOut()
-        preferencesManager.clearSession()
+        try {
+            kotlinx.coroutines.withTimeoutOrNull(2_000) {
+                val token = com.google.firebase.messaging.FirebaseMessaging.getInstance().token.await()
+                apiService.unregisterDevice(com.example.campusrelay.notifications.DeviceRegistration(token, false))
+            }
+        } catch (e: kotlinx.coroutines.CancellationException) { throw e
+        } catch (_: Exception) { /* Incoming messages also verify the current account locally. */
+        } finally {
+            firebaseAuth.signOut()
+            kotlinx.coroutines.withContext(kotlinx.coroutines.NonCancellable) { preferencesManager.clearSession() }
+        }
     }
 
     /**

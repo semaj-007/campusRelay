@@ -11,6 +11,8 @@ android {
     }
 
     defaultConfig {
+        buildConfigField("String", "API_BASE_URL", "\"${providers.gradleProperty("apiBaseUrl").getOrElse("https://10.0.2.2:5001/")}\"")
+        buildConfigField("String", "GOOGLE_WEB_CLIENT_ID", "\"${providers.gradleProperty("googleWebClientId").getOrElse("")}\"")
         applicationId = "com.example.campusrelay"
         minSdk = 37
         targetSdk = 37
@@ -33,6 +35,7 @@ android {
     }
     buildFeatures {
         viewBinding = true
+        buildConfig = true
     }
 }
 
@@ -41,7 +44,10 @@ dependencies {
     implementation(libs.androidx.appcompat)
     implementation(libs.androidx.constraintlayout)
     implementation(libs.androidx.core.ktx)
-    implementation(libs.firebase.bom)
+    implementation(platform(libs.firebase.bom))
+    implementation("com.google.android.gms:play-services-auth:21.2.0")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.9.0")
+    implementation("com.github.bumptech.glide:glide:4.16.0")
     implementation(libs.firebase.auth)
     implementation(libs.firebase.messaging)
     implementation(libs.material)

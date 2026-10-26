@@ -42,7 +42,15 @@ class SettingsFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         val b = binding ?: return
 
-        b.buttonSave.setOnClickListener { save(b) }
+        b.buttonSave.setOnClickListener {
+            val vault = (requireActivity().application as CampusRelayApp).serviceLocator.preferencesManager.sessionVault
+            if (b.switchBiometricLock.isChecked && !vault.protected) {
+                (requireActivity() as com.example.campusrelay.MainActivity).authenticateSession(true) { save(b) }
+            } else {
+                if (!b.switchBiometricLock.isChecked && vault.protected) vault.disable()
+                save(b)
+            }
+        }
         b.buttonSignOut.setOnClickListener {
             viewModel.signOut {
                 findNavController().navigate(R.id.action_settings_to_login)
@@ -52,7 +60,7 @@ class SettingsFragment : Fragment() {
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.uiState.collect { state ->
-                    if (!hasPopulatedFields) {
+                    if (state.loaded && !hasPopulatedFields) {
                         populateFields(b, state)
                         hasPopulatedFields = true
                     }
@@ -70,7 +78,7 @@ class SettingsFragment : Fragment() {
         b.switchNotifyDelivery.isChecked = state.notifyDelivery
         b.switchNotifyChat.isChecked = state.notifyChat
         b.switchDarkMode.isChecked = state.darkMode
-        when (state.languageCode) {
+        when (AppCompatDelegate.getApplicationLocales().toLanguageTags().substringBefore(',').ifBlank { "en" }) {
             Constants.LANGUAGE_ZULU -> b.radioLangZu.isChecked = true
             Constants.LANGUAGE_AFRIKAANS -> b.radioLangAf.isChecked = true
             else -> b.radioLangEn.isChecked = true
@@ -91,15 +99,19 @@ class SettingsFragment : Fragment() {
             darkMode = b.switchDarkMode.isChecked,
             biometricLock = b.switchBiometricLock.isChecked,
             notifyDelivery = b.switchNotifyDelivery.isChecked,
-            notifyChat = b.switchNotifyChat.isChecked
+            notifyChat = b.switchNotifyChat.isChecked,
+            onDone = {
+                context?.let { com.example.campusrelay.notifications.DeviceRegistrationWorker.schedule(it) }
+                AppCompatDelegate.setApplicationLocales(LocaleListCompat.forLanguageTags(languageCode))
+                context?.let { Toast.makeText(it, R.string.settings_saved, Toast.LENGTH_SHORT).show() }
+            }
         )
 
-        AppCompatDelegate.setApplicationLocales(LocaleListCompat.forLanguageTags(languageCode))
-        Toast.makeText(requireContext(), R.string.settings_saved, Toast.LENGTH_SHORT).show()
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         binding = null
+        hasPopulatedFields = false
     }
 }

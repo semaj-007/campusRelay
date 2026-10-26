@@ -51,7 +51,7 @@
                 android:layout_width="32dp"
                 android:layout_height="32dp"
                 android:src="@drawable/ic_carpool"
-                android:contentDescription="Vehicle" />
+                android:contentDescription="@string/ride_details_vehicle_label" />
         </LinearLayout>
 
         <!-- Vehicle and Seats -->
@@ -114,7 +114,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Driver"
+                android:text="@string/ride_details_driver_label"
                 android:textColor="@color/relay_text_secondary"
                 android:textSize="13sp" />
 

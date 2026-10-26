@@ -21,7 +21,7 @@
             android:layout_height="150dp"
             android:scaleType="centerCrop"
             android:background="@color/relay_surface"
-            android:contentDescription="Item photo" />
+            android:contentDescription="@string/item_photo" />
 
         <!-- Item Info -->
         <LinearLayout

@@ -1,5 +1,8 @@
 package com.example.campusrelay.ui.carpool
 
+import com.example.campusrelay.util.categoryLabel
+import com.example.campusrelay.util.conditionLabel
+import com.example.campusrelay.util.vehicleLabel
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
@@ -34,9 +37,9 @@ class RideOfferAdapter(
             val dateFormat = SimpleDateFormat("EEEE, HH:mm", Locale.getDefault())
             binding.textDepartureTime.text = dateFormat.format(rideOffer.departureTime)
 
-            binding.textVehicleType.text = rideOffer.vehicleType.name
-            binding.textSeatsAvailable.text = "${rideOffer.availableSeats} seats available"
-            binding.textPricePerSeat.text = "R${"%.2f".format(rideOffer.pricePerSeat)} / seat"
+            binding.textVehicleType.text = binding.root.context.vehicleLabel(rideOffer.vehicleType)
+            binding.textSeatsAvailable.text = binding.root.context.getString(com.example.campusrelay.R.string.seats_available, rideOffer.availableSeats)
+            binding.textPricePerSeat.text = binding.root.context.getString(com.example.campusrelay.R.string.ride_details_price_per_seat, rideOffer.pricePerSeat)
 
             // Set vehicle icon based on type
             val vehicleIcon = when (rideOffer.vehicleType) {

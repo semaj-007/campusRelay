@@ -10,7 +10,8 @@ data class CreateDeliveryRequestDto(
     @SerializedName("itemDescription") val itemDescription: String,
     @SerializedName("weightCategory") val weightCategory: String,
     @SerializedName("rewardAmount") val rewardAmount: Double,
-    @SerializedName("isEcoFriendlyRoute") val isEcoFriendlyRoute: Boolean
+    @SerializedName("isEcoFriendlyRoute") val isEcoFriendlyRoute: Boolean,
+    @SerializedName("clientRequestId") val clientRequestId: String? = null
 )
 
 /** 201 Created response body for POST /api/v1/deliveries. */

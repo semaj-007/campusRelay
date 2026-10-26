@@ -43,8 +43,7 @@ class CarpoolFragment : Fragment() {
         val b = binding ?: return
 
         adapter = RideOfferAdapter(onItemClick = { rideOffer ->
-            val action = CarpoolFragmentDirections.actionCarpoolToRideDetails(rideOffer.id)
-            findNavController().navigate(action)
+            findNavController().navigate(R.id.action_carpool_to_ride_details, androidx.core.os.bundleOf("rideId" to rideOffer.id))
         })
         b.recyclerRides.layoutManager = LinearLayoutManager(requireContext())
         b.recyclerRides.adapter = adapter

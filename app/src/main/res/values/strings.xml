@@ -53,7 +53,7 @@
     <string name="settings_bio_hint">Add a short bio</string>
     <string name="settings_location_label">On-campus location</string>
     <string name="settings_security_section">Security</string>
-    <string name="settings_biometric_lock">Require biometrics for sign-in &amp; handoffs</string>
+    <string name="settings_biometric_lock">Require biometrics to unlock this app</string>
     <string name="settings_notifications_section">Notifications</string>
     <string name="settings_notify_delivery_status">Delivery status updates</string>
     <string name="settings_notify_chat">New chat messages</string>
@@ -185,4 +185,21 @@
     <string name="language_english">English</string>
     <string name="language_zulu">isiZulu</string>
     <string name="language_afrikaans">Afrikaans</string>
+    <string name="biometric_sign_in_first">Sign in with SSO first, then enable biometric protection in Settings.</string>
+    <string name="biometric_locked">Your session is locked. Authenticate again or sign out. If your enrolled biometrics changed, sign in with SSO again.</string>
+    <string name="notification_channel">Delivery updates</string>
+    <string name="notification_delivery_created">Your delivery request has been posted.</string>
+    <string name="notification_delivery_fulfilled">Your delivery has been completed.</string>
+    <string name="sync_pending">%1$d request(s) waiting to sync; %2$d need attention.</string>
+    <string name="pending_delivery">Pending synchronisation</string>
+    <string name="bottom_nav_create">Create</string>
+    <string name="login_failed">Sign-in failed. Please try again.</string>
+    <string name="login_configuration_required">Google sign-in is not configured for this build.</string>
+    <string name="action_back">Back</string>
+    <string name="item_photo">Item photo</string>
+    <string name="seller_profile">Seller profile</string>
+    <string name="driver_profile">Driver profile</string>
+    <string name="seats_available">%1$d seats available</string>
+    <string name="category_label">Category: %1$s</string>
+    <string name="condition_label">Condition: %1$s</string>
 </resources>
